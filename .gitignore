@@ -1,0 +1,22 @@
+# LaTeX build products
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+
+# Local render and extraction products
+rendered_pages/
+tmp/
+
+# Large research archives and unpacked paper corpus
+*.zip
+01_open_access_papers/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+*~
