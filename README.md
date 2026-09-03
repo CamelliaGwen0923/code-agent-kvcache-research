@@ -1,113 +1,93 @@
-# Code Agent KV-Cache Research
+# Code Agent KVCache Research
 
-面向 Code Agent 长上下文请求的 KV-cache 复用、分层存储与软硬件协同研究。
+**English** | [简体中文](README.zh-CN.md)
 
-> 当前项目阶段：**调研成果版本管理与归档**  
-> 本阶段仅固化文献、综述、指标口径与后续研究入口；尚未进入系统实现与性能结论阶段。
+Research on safe KVCache reuse, tiered retention, and hardware-software co-design for long-context Code Agents.
 
-## 阶段状态
+> **Project status:** Stage 0-5.7 was approved on September 2, 2026. The Stage 0 research questions, hypotheses, workloads, baselines, experiment matrix, primary metrics, correctness gates, and reproducibility rules are frozen. The research/design archive is complete; formal Stage 0 closure still requires the `stage-0-complete` tag. Stage 1 has not started.
+>
+> **Evidence boundary:** this repository contains research and experimental design, not completed performance results. Candidate targets must not be presented as measured outcomes.
 
-本阶段已经完成 Code Agent 研究边界、五类文献地图、结构化索引、独立 IEEE 调研报告、首轮硬件约束和 GitHub 归档入口。当前内容不代表已经取得真实 Trace 统计或 RTX 5090 性能结果，也不代表更高容量 HBM 服务器已经获批。
+## Start here
 
-## 当前成果
+1. Read the [English reading guide](references/Reading_Guide_EN.md) or [中文阅读路线](references/中文阅读路线.md).
+2. Review the [Stage 0 artifact index](reports/stage-0/README.md).
+3. Read the Stage 0-5 experimental predesign report in [English PDF](reports/stage-0/Code_Agent_KVCache_Stage_0-5_Experimental_Predesign_Report_v1_EN.pdf), [English DOCX](reports/stage-0/Code_Agent_KVCache_Stage_0-5_Experimental_Predesign_Report_v1_EN.docx), or [Chinese DOCX](reports/stage-0/Code_Agent_KVCache_Stage_0-5_Experimental_Predesign_Report_v1_ZH.docx).
+4. Use the [Stage 0-4 evidence-gap matrix](reports/stage-0/Code_Agent_KVCache_Stage_0-4_Evidence_Gap_Matrix_v1.xlsx) and [problem-convergence report](reports/stage-0/Code_Agent_KVCache_Stage_0-4_Research_Problem_Convergence_v1.pdf) for the evidence behind the frozen direction.
 
-- [英文 IEEE 双栏调研报告](reports/Survey_KV_Cache_Reuse_and_Hierarchical_Memory_for_Code_Agents_IEEE_v1.pdf)
-- [前期 Code Agent 工作负载英文报告](reports/Code_Agent_Workloads_and_KV_Cache_Reuse_IEEE_English.pdf)
-- [论文 LaTeX 源码](survey/survey.tex)
-- [76 篇文献目录及项目相关性说明](references/文献目录与项目相关性.md)
-- [中文分层阅读路线](references/中文阅读路线.md)
-- [BibTeX 文献库](references/references.bib)
-- [CSV 文献索引](references/references.csv)
-- [项目定义与技术指标确认表](project_docs/Code_Agent_KVCache_Project_Definition_Metrics_Confirmation_v1.docx)
-- [Code Agent Trace 字段模板](project_docs/Code_Agent_Trace_Field_Template_v1.xlsx)
-- [Code Agent 工作负载与 KVCache 复用场景分析](project_docs/Code_Agent_KVCache_Workload_Analysis_v1.docx)
+## Frozen research direction
 
-## 调研覆盖范围
+The project studies pause-resume, append-only Code Agent sessions. Its main line is:
 
-1. Code Agent 工作负载、仓库级任务与长时程交互；
-2. 精确前缀缓存、Radix/Chunk 索引与位置相关性；
-3. HBM、DRAM、NVMe 及远端 KV-cache 分层；
-4. Prefill/Decode 解耦、KV 传输与收益感知调度；
-5. KV-cache 量化、压缩、淘汰及模型架构兼容；
-6. 正确性、延迟、成本、隔离与侧信道安全。
+> **Exact-prefix reuse + joint GPU/DRAM/NVMe/recomputation decisions + task-level value evaluation**
 
-## 语料规模
+The evidence chain is:
 
-| 内容 | 数量 |
-|---|---:|
-| 论文记录 | 76 |
-| 可离线阅读的开放获取 PDF | 39 |
-| 仅保留官方论文入口 | 37 |
-| 官方技术文档入口 | 18 |
-| IEEE 调研报告参考文献 | 88 |
+> Why reuse -> what can be reused safely -> where to restore it from -> whether restoration is faster than recomputation -> whether output is correct -> whether the task succeeds -> whether the conclusion is reproducible.
 
-完整离线资源集中在 ZIP 归档中，避免许可证混淆和仓库体积持续膨胀。
+| Frozen object | Scope |
+|---|---|
+| Research questions | RQ1-RQ5; RQ1-RQ4 are core and RQ5 is long-term generalization |
+| Goals | G1-G8 |
+| Falsifiable hypotheses | H1-H8 |
+| Workloads | W1 public traces, W2 self-collected SWE-bench Agent traces, W3 synthetic traces |
+| Replay modes | R1 structural, R2 token-exact, R3 end-to-end Agent |
+| Baselines | B0-B6 |
+| Experiment groups | M0-M8 |
+| Primary metrics | correctness, effective token hit rate, P95 TTFT, session completion time, cost per successful task |
 
-## 完整调研资料包
+High-risk non-prefix reuse (G6) begins only after the exact-prefix main line passes every correctness gate. Cross-model, architecture, and hardware generalization (G8) is a later extension.
 
-文件：`Code_Agent_KVCache_Comprehensive_Research_Pack_v2.zip`
+## Stage 0 outputs
 
-- 大小：84,017,532 bytes（约 80.1 MiB）
-- SHA-256：`0e2752786c9e484de41c5858a90d783e115cbf5a673a9aca408a1351a8bb9b7a`
+- [Stage 0 artifact index](reports/stage-0/README.md)
+- [English IEEE survey](reports/Survey_KV_Cache_Reuse_and_Hierarchical_Memory_for_Code_Agents_IEEE_v1.pdf)
+- [Earlier English workload report](reports/Code_Agent_Workloads_and_KV_Cache_Reuse_IEEE_English.pdf)
+- [IEEE survey LaTeX source](survey/survey.tex)
+- [76-paper Chinese annotated catalog](references/文献目录与项目相关性.md)
+- [BibTeX library](references/references.bib) and [CSV index](references/references.csv)
+- [Official technical resources / 官方技术资料](references/official_docs.md)
+- [Project definition and metric confirmation](project_docs/Code_Agent_KVCache_Project_Definition_Metrics_Confirmation_v1.docx)
+- [Code Agent trace field template](project_docs/Code_Agent_Trace_Field_Template_v1.xlsx)
+- [Workload and KVCache reuse analysis](project_docs/Code_Agent_KVCache_Workload_Analysis_v1.docx)
 
-完整 ZIP 在本项目的交付对话中提供下载；上传 GitHub 后，统一作为 Release `v0.3-research-survey` 的附件，不写入 Git 历史。在 Ubuntu 中可执行：
+## Candidate targets are not results
 
-```bash
-sha256sum Code_Agent_KVCache_Comprehensive_Research_Pack_v2.zip
-```
+The earlier figures of 70%/95% hit rate, 90% TTFT reduction, and 10% cost ratio remain candidate targets for Stage 1 experiments. They are not achieved results and must not be cited as such.
 
-输出应与上面的 SHA-256 完全一致。ZIP 没有直接写入 Git 历史，因为它包含大量论文 PDF，约 80 MiB。
+## Planned initial environment
 
-## 当前研究判断
+- Ubuntu
+- NVIDIA GeForce RTX 5090, 32 GB GDDR7
+- 64 GB system memory
+- Local NVMe
 
-- Code Agent 的稳定系统提示词、工具定义、仓库规则及追加式轨迹，为精确前缀复用提供了天然机会。
-- 文本相同不等于 KV 状态可直接复用；前置上下文、Token 位置、模型版本和位置编码均属于正确性条件。
-- 逻辑命中只有在查询、传输和恢复开销低于重新 Prefill 时，才构成有效命中。
-- 项目提出的 70%/95% 命中率、90% TTFT 降幅和 10% 成本比目前均为**待验证目标**，不是既有实验结论。
+Exact model revision, CUDA/PyTorch/vLLM versions, cache budgets, block size, concurrency, repetitions, and timeouts remain undecided until the Stage 1 environment audit and Pilot.
 
-## 计划实验环境
+## Stage 1 admission rule
 
-- 操作系统：Ubuntu
-- GPU：NVIDIA GeForce RTX 5090，32 GB GDDR7
-- 系统内存：64 GB
-- 更高容量 HBM/服务器环境：申请暂定，尚未锁定
+Stage 1 starts with a read-only inventory of Ubuntu, NVIDIA driver, CUDA, Python, GPU and memory health, swap, NVMe, Docker, existing environments, and isolation requirements. Until that audit is complete, the project does not authorize software installation, driver upgrades, changes to existing Python environments, or formal performance experiments.
 
-## 编译 IEEE 报告
+Stage 1 experiment code and results will live in a separate private repository, `code-agent-kvcache-experiments`. Large KV files, model weights, secrets, private prompts, unsanitized traces, and unsanitized logs must not enter Git.
 
-源码位于 `survey/`：
-
-- `survey.tex`：IEEEtran 双栏正文，图形使用 TikZ 内嵌生成；
-- `references.bib`：论文使用的参考文献库；
-- `IEEEtran.cls`：归档构建所使用的类文件。
-
-Ubuntu 安装完整 TeX Live 后，在 `survey/` 中运行：
-
-```bash
-latexmk -pdf -interaction=nonstopmode -halt-on-error survey.tex
-```
-
-`reports/` 中的 PDF 是已完成逐页视觉检查的交付版本。
-
-## 仓库结构
+## Repository structure
 
 ```text
 .
-├── README.md
-├── reports/                 # 独立 IEEE PDF
-├── survey/                  # LaTeX 源码、IEEEtran 与引用库
-├── references/              # CSV/BibTeX/JSON/Markdown 索引
-├── project_docs/            # 前期可编辑项目材料
-├── archive/                 # 版本号和完整包内文件校验清单
-└── release/                 # 阶段发布说明
+├── README.md / README.zh-CN.md
+├── reports/
+│   ├── stage-0/             # Stage 0-4 and 0-5 frozen artifacts
+│   └── *.pdf                # IEEE reports
+├── survey/                  # LaTeX source, IEEEtran, and bibliography
+├── references/              # bilingual guides, indexes, and official links
+├── project_docs/            # editable early-stage project materials
+├── archive/                 # package version and checksum inventory
+└── release/                 # bilingual release notes
 ```
 
-## 使用与再分发边界
+## Use, confidentiality, and redistribution
 
-本仓库当前用于内部研究归档。各论文及第三方材料的版权归原作者与出版方所有：
+This private repository is an internal research archive. Copyright in papers and third-party materials remains with their authors and publishers. Open-access PDFs in the separate research package follow their source licenses; uncertain items are represented by official links only.
 
-- 完整包中的离线论文仅收录来源页面明确标注开放许可的版本，具体许可入口见来源清单；
-- 对无法确认可再分发的论文，仅保留官方入口，不复制全文；
-- 官方网页会持续更新，本项目不把网页快照作为长期权威规范；
-- 引用、改编和再次分发时，仍须遵守每篇论文自己的许可与署名条件。
+Before sharing any copy, remove unpublished prompts, private traces, credentials, keys, model weights, large KV artifacts, and unsanitized logs. Project-authored reports, indexes, and notes grant no additional reuse license until an explicit repository license is adopted.
 
-项目自身的报告、索引和说明材料在确定对外开源许可证前，默认不授予额外使用许可。

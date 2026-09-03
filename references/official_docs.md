@@ -1,6 +1,8 @@
-# 官方技术资料入口
+# Official Technical Resources / 官方技术资料入口
 
-以下入口在 0-3 阶段归档时核验。在线文档会持续更新，引用时应记录访问日期与版本。
+**English:** These links were verified when Stage 0-3 was archived. Online documentation changes over time; record the access date and cited version.
+
+**中文：** 以下入口在 Stage 0-3 归档时核验。在线文档会持续更新，引用时应记录访问日期与版本。
 
 1. [vLLM Automatic Prefix Caching](https://docs.vllm.ai/en/latest/features/automatic_prefix_caching/)
 2. [vLLM Prefix Caching Design](https://docs.vllm.ai/en/v0.25.0/design/prefix_caching/)
