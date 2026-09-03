@@ -4,7 +4,7 @@
 
 Research on safe KVCache reuse, tiered retention, and hardware-software co-design for long-context Code Agents.
 
-> **Project status:** Stage 0-5.7 was approved on September 2, 2026. The Stage 0 research questions, hypotheses, workloads, baselines, experiment matrix, primary metrics, correctness gates, and reproducibility rules are frozen. The research/design archive is complete; formal Stage 0 closure still requires the `stage-0-complete` tag. Stage 1 has not started.
+> **Project status:**  The Stage 0 research questions, hypotheses, workloads, baselines, experiment matrix, primary metrics, correctness gates, and reproducibility rules are frozen. The research/design archive is complete. Stage 1 has not started.
 >
 > **Evidence boundary:** this repository contains research and experimental design, not completed performance results. Candidate targets must not be presented as measured outcomes.
 
